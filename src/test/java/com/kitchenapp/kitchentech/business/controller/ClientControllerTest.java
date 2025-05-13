@@ -2,7 +2,6 @@ package com.kitchenapp.kitchentech.business.controller;
 
 import com.kitchenapp.kitchentech.business.Enums.DocumentType;
 import com.kitchenapp.kitchentech.business.model.Client;
-import com.kitchenapp.kitchentech.business.repository.ClientRepository;
 import com.kitchenapp.kitchentech.business.service.ClientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
