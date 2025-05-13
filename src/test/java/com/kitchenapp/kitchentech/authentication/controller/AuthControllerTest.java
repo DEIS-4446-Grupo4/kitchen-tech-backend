@@ -6,7 +6,6 @@ import com.kitchenapp.kitchentech.authentication.model.RegisterRestaurantRequest
 import com.kitchenapp.kitchentech.authentication.model.RegisterStaffUserRequest;
 import com.kitchenapp.kitchentech.authentication.service.AuthService;
 import com.kitchenapp.kitchentech.user.Enums.Role;
-import com.kitchenapp.kitchentech.user.model.Restaurant;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

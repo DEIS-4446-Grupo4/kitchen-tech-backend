@@ -57,6 +57,22 @@ class TableControllerTest {
 
     @Test
     void getAllTablesByRestaurantId() {
+        TableService tableServiceMock = mock(TableService.class);
+        TableController tableController = new TableController(tableServiceMock);
+
+        // Caso 1: Lista vacía
+        when(tableServiceMock.getAllTablesByRestaurantId(1L)).thenReturn(List.of());
+        ResponseEntity<List<TableRestaurant>> responseEmpty = tableController.getAllTablesByRestaurantId(1L);
+        assertEquals(HttpStatus.NO_CONTENT, responseEmpty.getStatusCode());
+        assertNull(responseEmpty.getBody());
+
+        // Caso 2: Lista con elementos
+        TableRestaurant table = new TableRestaurant();
+        when(tableServiceMock.getAllTablesByRestaurantId(1L)).thenReturn(List.of(table));
+        ResponseEntity<List<TableRestaurant>> responseNotEmpty = tableController.getAllTablesByRestaurantId(1L);
+        assertEquals(HttpStatus.OK, responseNotEmpty.getStatusCode());
+        assertNotNull(responseNotEmpty.getBody());
+        assertEquals(1, responseNotEmpty.getBody().size());
     }
 
     @Test
@@ -82,18 +98,47 @@ class TableControllerTest {
 
     @Test
     void updateTable() {
+        // Arrange
+        TableRestaurant existingTable = new TableRestaurant();
+        existingTable.setId(1L);
+        existingTable.setTableNumber(1L);
+
+        TableRestaurant updatedTable = new TableRestaurant();
+        updatedTable.setId(1L);
+        updatedTable.setTableNumber(2L);
+
+        TableService tableServiceMock = mock(TableService.class);
+        when(tableServiceMock.getTableById(1L)).thenReturn(existingTable);
+        when(tableServiceMock.updateTable(any(TableRestaurant.class))).thenReturn(updatedTable);
+
+        TableController tableController = new TableController(tableServiceMock);
+
+        // Act
+        ResponseEntity<TableRestaurant> response = tableController.updateTable(1L, updatedTable);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1L, response.getBody().getId());
+        assertEquals(2L, response.getBody().getTableNumber());
     }
 
     @Test
     void deleteTable() {
-        // Arrange
         TableService tableServiceMock = mock(TableService.class);
         TableController tableController = new TableController(tableServiceMock);
 
-        // Act
-        ResponseEntity<String> response = tableController.deleteTable(1L);
+        // Caso 1: Mesa no encontrada
+        when(tableServiceMock.getTableById(1L)).thenReturn(null);
+        ResponseEntity<String> responseNotFound = tableController.deleteTable(1L);
+        assertEquals(HttpStatus.NOT_FOUND, responseNotFound.getStatusCode());
+        assertNull(responseNotFound.getBody());
 
-        // Assert
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        // Caso 2: Mesa eliminada
+        TableRestaurant table = new TableRestaurant();
+        when(tableServiceMock.getTableById(1L)).thenReturn(table);
+        ResponseEntity<String> responseDeleted = tableController.deleteTable(1L);
+        assertEquals(HttpStatus.OK, responseDeleted.getStatusCode());
+        assertEquals("Table deleted successfully", responseDeleted.getBody());
     }
 }
