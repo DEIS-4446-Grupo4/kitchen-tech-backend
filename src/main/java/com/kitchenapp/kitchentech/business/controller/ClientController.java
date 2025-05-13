@@ -37,8 +37,11 @@ public class ClientController {
     @Transactional(readOnly = true)
     @GetMapping("/{clientId}")
     public ResponseEntity<Client> getClientById(@PathVariable(name = "clientId")Long clientId){
-        clientService.existsClientById(clientId);
-        return new ResponseEntity<Client>(clientService.getClientById(clientId),HttpStatus.OK);
+        Client client = clientService.getClientById(clientId);
+        if (client == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     // URL: http://localhost:8080/api/kitchentech/v1/client
@@ -68,11 +71,13 @@ public class ClientController {
     // URL: http://localhost:8080/api/kitchentech/v1/client/{clientId}
     // Method: DELETE
     @DeleteMapping("/{clientId}")
-    public ResponseEntity<String> deleteClient(@PathVariable(name="clientId") Long clientId){
-        clientService.existsClientById(clientId);
+    public ResponseEntity<String> deleteClient(Long clientId) {
+        Client client = clientService.getClientById(clientId);
+        if (client == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         clientService.deleteClient(clientId);
-
-        return new ResponseEntity<String>("Client deleted successfully",HttpStatus.OK);
+        return new ResponseEntity<>("Client deleted successfully", HttpStatus.OK);
     }
 
 }
