@@ -1,7 +1,6 @@
 package com.kitchenapp.kitchentech.business.controller;
 
 import com.kitchenapp.kitchentech.business.model.Product;
-import com.kitchenapp.kitchentech.business.Dto.ProductDto;
 import com.kitchenapp.kitchentech.business.repository.ProductRepository;
 import com.kitchenapp.kitchentech.business.service.ProductService;
 import com.kitchenapp.kitchentech.exception.ResourceNotFoundException;
@@ -24,7 +23,7 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     @Autowired
-    public ProductController(ProductService productService, RestaurantRepository restaurantRepository, ProductRepository productRepository) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
         this.restaurantRepository = restaurantRepository;
         this.productRepository = productRepository;
@@ -58,7 +57,7 @@ public class ProductController {
     // Method: POST
     @Transactional
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDTO) {
+    public ResponseEntity<Product> createProduct(@RequestBody Product productDTO) {
         Restaurant restaurant = restaurantRepository.findById(productDTO.getRestaurantId())
                 .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
 
