@@ -7,6 +7,7 @@ class AuthControllerTest {
 
     @Test
     void registerRestaurant() {
+
     }
 
     @Test

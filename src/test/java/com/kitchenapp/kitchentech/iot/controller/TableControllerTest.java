@@ -34,7 +34,6 @@ class TableControllerTest {
 
         TableService tableServiceMock = mock(TableService.class);
         when(tableServiceMock.createTable(any(TableRestaurant.class))).thenReturn(tableRestaurant);
-
         TableController tableController = new TableController(tableServiceMock);
 
         // Act
