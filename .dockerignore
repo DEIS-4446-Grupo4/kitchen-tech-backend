@@ -1,0 +1,22 @@
+# Archivos y carpetas de desarrollo
+.idea
+.vscode
+*.iml
+bin
+build
+out
+
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos sensibles
+.env
+*.env
+
+# Otros archivos innecesarios
+Dockerfile
+docker-compose.yml
+README.md
+LICENSE
+*.md
