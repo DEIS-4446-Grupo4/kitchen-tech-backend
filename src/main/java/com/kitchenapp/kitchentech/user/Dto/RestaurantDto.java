@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -25,4 +26,5 @@ public class RestaurantDto {
     private String district;
     private String role;
     private List<StaffUser> staffUsers;
+    private BigDecimal casingCash;
 }

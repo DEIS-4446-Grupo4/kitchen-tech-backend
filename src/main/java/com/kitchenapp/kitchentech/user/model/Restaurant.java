@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -56,6 +57,9 @@ public class Restaurant implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "casing_cash", nullable = false)
+    private BigDecimal casingCash = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Product> products;
