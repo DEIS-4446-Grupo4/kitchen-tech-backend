@@ -20,7 +20,7 @@ public class KitchentechApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("*")
+						.allowedOrigins("https://kitchentech.netlify.app/")
 						.allowedMethods("*")
 						.allowedHeaders("*");
 			}
