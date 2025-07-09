@@ -86,13 +86,15 @@ public class SaleController {
 
     }
 
-    @ DeleteMapping("/{saleId}")
-    public ResponseEntity deleteSale(@PathVariable(name = "saleId") Long saleId) {
-        if(saleService.getSaleByRestaurantSaleId(saleId) == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        saleService.deleteSale(saleId);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Sale> cancelSale(@PathVariable Long id) {
+        Sale sale = saleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
+
+        sale.setSaleStatus(SaleStatus.CANCELLED);
+        saleRepository.save(sale);
+
+        return ResponseEntity.ok(sale);
     }
 
     private String generateCorrelative(DocumentType type) {
