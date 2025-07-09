@@ -5,6 +5,7 @@ import com.kitchenapp.kitchentech.business.model.Client;
 import com.kitchenapp.kitchentech.business.repository.AccountRepository;
 import com.kitchenapp.kitchentech.business.repository.ClientRepository;
 import com.kitchenapp.kitchentech.exception.ResourceNotFoundException;
+import com.kitchenapp.kitchentech.payment.Dto.SaleSummaryDto;
 import com.kitchenapp.kitchentech.payment.Enums.DocumentType;
 import com.kitchenapp.kitchentech.payment.Enums.SaleStatus;
 import com.kitchenapp.kitchentech.payment.model.Sale;
@@ -54,6 +55,12 @@ public class SaleController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(sales);
+    }
+
+    @GetMapping("/summary/{restaurantId}")
+    public ResponseEntity<SaleSummaryDto> getSalesSummary(@PathVariable Long restaurantId) {
+        SaleSummaryDto summary = saleRepository.getSaleSummaryByRestaurantId(restaurantId);
+        return ResponseEntity.ok(summary);
     }
 
     @Transactional

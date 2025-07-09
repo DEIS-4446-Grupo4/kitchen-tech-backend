@@ -1,5 +1,6 @@
 package com.kitchenapp.kitchentech.payment.repository;
 
+import com.kitchenapp.kitchentech.payment.Dto.SaleSummaryDto;
 import com.kitchenapp.kitchentech.payment.Enums.DocumentType;
 import com.kitchenapp.kitchentech.payment.model.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,10 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
     // SaleRepository.java
     @Query("SELECT s.correlative FROM Sale s WHERE s.documentType = :type ORDER BY s.id DESC LIMIT 1")
     String findLastCorrelativeByDocumentType(@Param("type") DocumentType type);
+
+    @Query("SELECT new com.kitchenapp.kitchentech.payment.Dto.SaleSummaryDto(COUNT(s), SUM(s.amount)) " +
+            "FROM Sale s WHERE s.restaurantId = :restaurantId AND s.saleStatus = 'COMPLETED'")
+    SaleSummaryDto getSaleSummaryByRestaurantId(@Param("restaurantId") Long restaurantId);
+
 
 }
