@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -48,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
                 .city(registerRestaurantRequest.getCity())
                 .district(registerRestaurantRequest.getDistrict())
                 .role(registerRestaurantRequest.getRole())
+                .casingCash(BigDecimal.ZERO)
                 .build();
         restaurantRepository.save(restaurant);
         return AuthResponse.builder()

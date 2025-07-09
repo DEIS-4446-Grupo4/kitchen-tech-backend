@@ -5,6 +5,7 @@ import com.kitchenapp.kitchentech.authentication.model.LoginRequest;
 import com.kitchenapp.kitchentech.authentication.model.RegisterRestaurantRequest;
 import com.kitchenapp.kitchentech.authentication.model.RegisterStaffUserRequest;
 import com.kitchenapp.kitchentech.authentication.service.AuthService;
+import com.kitchenapp.kitchentech.user.model.Restaurant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("api/kitchentech/v1/auth")
@@ -30,7 +33,7 @@ public class AuthController {
         // Verificar si ya existe el nombre de usuario
         authService.existsUserByUsername(request, null);
 
-        // Registrar el restaurante
+        // Registrar el restaurante (la inicialización de casingCash debe hacerse en el servicio)
         AuthResponse registeredRestaurant = authService.registerRestaurant(request);
         return new ResponseEntity<>(registeredRestaurant, HttpStatus.CREATED);
     }
