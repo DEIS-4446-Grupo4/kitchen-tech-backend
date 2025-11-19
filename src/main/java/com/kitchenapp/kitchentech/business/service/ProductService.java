@@ -13,5 +13,5 @@ public interface ProductService {
     public Product updateProduct(Product product);
     public List<Product> getProductByCategory(String category);
 
-    Product findByName(String productName);
+    Product findByProductName(String productName);
 }

@@ -61,9 +61,9 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product findByName(String productName) {
+    public Product findByProductName(String productName) {
         if (productName != null){
-            return productRepository.findByName(productName);
+            return productRepository.findByProductName(productName);
         }
         else {
             return null;
