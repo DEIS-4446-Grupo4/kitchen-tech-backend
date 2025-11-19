@@ -30,11 +30,11 @@ public class Account {
     @Column(name = "account_name", nullable = false)
     private String accountName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
     private TableRestaurant table;
 
@@ -53,7 +53,7 @@ public class Account {
     @Column(name = "date_log",nullable = false)
     private LocalDateTime dateLog;
 
-    @OneToMany(mappedBy = "accountId", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "accountId", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<AccountProduct> products = new ArrayList<>();
 
     public void updateTotalAccount() {

@@ -61,22 +61,22 @@ public class Restaurant implements UserDetails {
     @Column(name = "casing_cash", nullable = false)
     private BigDecimal casingCash = BigDecimal.ZERO;
 
-    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products;
 
-    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Supply> supplies;
 
-    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StaffUser> staffUsers;
 
-    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TableRestaurant> tables;
 
-    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Client> clients ;
 
-    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurantId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Account> accounts;
 
     @Override

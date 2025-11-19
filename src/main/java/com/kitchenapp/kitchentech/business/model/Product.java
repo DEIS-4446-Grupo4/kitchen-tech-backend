@@ -34,8 +34,7 @@ public class Product {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Long restaurantId;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "product_supplies", joinColumns = @JoinColumn(name = "product_id"))
-    @Column(name = "supplies")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "product_id")
     private List<Supply> supplies = new ArrayList<>();
 }
