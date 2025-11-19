@@ -60,4 +60,14 @@ public class ProductServiceImpl implements ProductService{
         }
     }
 
+    @Override
+    public Product findByName(String productName) {
+        if (productName != null){
+            return productRepository.findByName(productName);
+        }
+        else {
+            return null;
+        }
+    }
+
 }
