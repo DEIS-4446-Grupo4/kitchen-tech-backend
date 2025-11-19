@@ -16,7 +16,7 @@ out
 
 # Otros archivos innecesarios
 Dockerfile
-docker-compose.yml
+docker-compose.dev.yml
 README.md
 LICENSE
 *.md
