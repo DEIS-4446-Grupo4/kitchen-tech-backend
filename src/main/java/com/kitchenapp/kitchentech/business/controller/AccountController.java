@@ -1,5 +1,6 @@
 package com.kitchenapp.kitchentech.business.controller;
 
+import com.kitchenapp.kitchentech.business.Dto.AccountDTO;
 import com.kitchenapp.kitchentech.business.Dto.AccountProductDto;
 import com.kitchenapp.kitchentech.business.model.Account;
 import com.kitchenapp.kitchentech.business.model.AccountProduct;
@@ -32,8 +33,8 @@ public class AccountController {
     // Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<Account>> getAllAccounts(@PathVariable(name="restaurantId")Long restaurantId){
-        List<Account> accounts = accountService.getAllAccounts(restaurantId);
+    public ResponseEntity<List<AccountDTO>> getAllAccounts(@PathVariable(name="restaurantId")Long restaurantId){
+        List<AccountDTO> accounts = accountService.getAllAccounts(restaurantId);
         if(accounts.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

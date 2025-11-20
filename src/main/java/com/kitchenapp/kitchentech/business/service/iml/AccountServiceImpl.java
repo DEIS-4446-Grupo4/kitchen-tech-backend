@@ -1,14 +1,11 @@
 package com.kitchenapp.kitchentech.business.service.iml;
 
+import com.kitchenapp.kitchentech.business.Dto.AccountDTO;
 import com.kitchenapp.kitchentech.business.model.Account;
 import com.kitchenapp.kitchentech.business.repository.AccountRepository;
 import com.kitchenapp.kitchentech.business.service.AccountService;
-import com.kitchenapp.kitchentech.exception.ValidationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
@@ -21,8 +18,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAllAccounts(Long restaurantId) {
-        return accountRepository.findByRestaurantId(restaurantId);
+    public List<AccountDTO> getAllAccounts(Long restaurantId) {
+        List<Account> accounts = accountRepository.findByRestaurantId(restaurantId);
+        return accounts.stream().map(a -> new AccountDTO(a.getId(), a.getAccountName(), a.getClient().getId(), a.getTable().getId(), a.getTotalAccount()))
+                .toList();
     }
 
     @Override
