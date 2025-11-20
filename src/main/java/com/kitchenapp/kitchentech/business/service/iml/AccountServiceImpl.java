@@ -20,7 +20,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDTO> getAllAccounts(Long restaurantId) {
         List<Account> accounts = accountRepository.findByRestaurantId(restaurantId);
-        return accounts.stream().map(a -> new AccountDTO(a.getId(), a.getAccountName(), a.getClient().getId(), a.getTable().getId(), a.getTotalAccount()))
+        return accounts.stream().map(a -> new AccountDTO(a.getId(), a.getAccountName(), a.getTable().getId(), a.getTotalAccount()))
                 .toList();
     }
 

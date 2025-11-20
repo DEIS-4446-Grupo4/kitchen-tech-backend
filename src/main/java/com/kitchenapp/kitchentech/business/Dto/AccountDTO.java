@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class AccountDTO {
     private Long id;
     private String accountName;
-    private Long clientId;
     private Long tableId;
     private Float totalAccount;
 }
