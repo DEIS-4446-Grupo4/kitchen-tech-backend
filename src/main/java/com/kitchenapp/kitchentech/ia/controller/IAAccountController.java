@@ -7,8 +7,6 @@ import com.kitchenapp.kitchentech.business.model.Product;
 import com.kitchenapp.kitchentech.business.service.AccountProductService;
 import com.kitchenapp.kitchentech.business.service.AccountService;
 import com.kitchenapp.kitchentech.business.service.ProductService;
-import com.kitchenapp.kitchentech.ia.dto.IAProductInput;
-import com.kitchenapp.kitchentech.ia.dto.IARequest;
 import com.kitchenapp.kitchentech.iot.service.TableService;
 import com.kitchenapp.kitchentech.business.Enums.State;
 import org.springframework.beans.factory.annotation.Autowired;
