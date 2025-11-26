@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService{
             productToUpdate.setProductImageUrl(product.getProductImageUrl());
             productToUpdate.setProductPrice(product.getProductPrice());
             productToUpdate.setRestaurantId(product.getRestaurantId());
-            productToUpdate.setSupplies(product.getSupplies());
+            //productToUpdate.setSupplies(product.getSupplies());
             return productRepository.save(productToUpdate);
         }
         else {

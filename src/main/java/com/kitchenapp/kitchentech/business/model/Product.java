@@ -33,8 +33,4 @@ public class Product {
 
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Long restaurantId;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "product_id")
-    private List<Supply> supplies = new ArrayList<>();
 }
