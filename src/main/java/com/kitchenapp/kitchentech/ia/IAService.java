@@ -1,45 +1,70 @@
 package com.kitchenapp.kitchentech.ia;
 
-import com.kitchenapp.kitchentech.business.model.Account;
-import com.kitchenapp.kitchentech.business.model.AccountProduct;
-import com.kitchenapp.kitchentech.business.model.Product;
-import com.kitchenapp.kitchentech.business.service.AccountProductService;
-import com.kitchenapp.kitchentech.business.service.AccountService;
-import com.kitchenapp.kitchentech.business.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kitchenapp.kitchentech.ia.dto.ProductResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class IAService {
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private AccountProductService accountProductService;
 
-    public String processMessage(String from, String message) {
-        // Ejemplo básico de interpretación sin modelo
-        // "Agregar 2 lomos saltados a mesa 4"
-        Pattern p = Pattern.compile("(?i)agregar (\\d+) (.+?) a mesa (\\d+)");
-        Matcher m = p.matcher(message);
+    // Recuerda: API KEY en application.properties idealmente
+    private static final String API_KEY = "TU_API_KEY_AQUI";
+    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
 
-        if (m.find()) {
-            int quantity = Integer.parseInt(m.group(1));
-            String productName = m.group(2).trim();
-            int tableId = Integer.parseInt(m.group(3));
+    public ProductResponse classifyProduct(String nombreInput) {
+        RestTemplate restTemplate = new RestTemplate();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            Product product = productService.findByName(productName);
-            if (product == null) return "Producto no encontrado";
+        // --- PROMPT OPTIMIZADO PARA CATEGORIZACIÓN ---
+        String prompt = String.format(
+                "Actúa como un administrador de restaurante. Analiza el ítem: '%s'.\n" +
+                        "Genera un JSON estricto con solo 3 campos:\n" +
+                        "1. nombre: El nombre del plato con formato correcto (Mayúsculas iniciales).\n" +
+                        "2. categoria: Clasifícalo ÚNICAMENTE en una de estas opciones: ['Almuerzo', 'Postre', 'Sandwich', 'Bebida', 'Entrada'].\n" +
+                        "3. precio: Un precio estimado en Soles Peruanos (PEN) como número decimal.\n\n" +
+                        "Responde SOLO el JSON.",
+                nombreInput
+        );
 
-            Account account = accountService.getOrCreateAccountForTable(tableId);
-            accountProductService.addOrUpdateAccountProduct(account, new AccountProduct(product.getId(), quantity));
+        // Configuración estándar de la petición a Google
+        Map<String, Object> requestBody = new HashMap<>();
+        Map<String, Object> content = new HashMap<>();
+        Map<String, Object> parts = new HashMap<>();
 
-            return "✅ Se agregaron " + quantity + " " + productName + " a la mesa " + tableId;
+        parts.put("text", prompt);
+        content.put("parts", List.of(parts));
+        requestBody.put("contents", List.of(content));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(API_URL, entity, String.class);
+
+            JsonNode root = objectMapper.readTree(response.getBody());
+            String textResponse = root.path("candidates").get(0)
+                    .path("content").path("parts").get(0)
+                    .path("text").asText();
+
+            // Limpiamos cualquier formato markdown que la IA agregue
+            textResponse = textResponse.replace("⁠  json", "").replace("  ⁠", "").trim();
+
+            return objectMapper.readValue(textResponse, ProductResponse.class);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error en Opal Service: " + e.getMessage());
         }
-        return "No entendí el mensaje, por favor usa el formato: 'Agregar <cantidad> <producto> a mesa <número>'";
     }
 }
