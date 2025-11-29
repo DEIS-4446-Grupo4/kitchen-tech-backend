@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -60,10 +62,33 @@ public class AccountController {
     @Transactional
     @PostMapping
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        account.updateTotalAccount();  // Calcula el total antes de guardar la cuenta
-        Account createdAccount = accountService.createAccount(account);
-        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
+
+        // 1. Guardar la cuenta sin productos
+        account.setId(null);
+        account.setDateCreated(LocalDateTime.now());
+        account.setDateLog(LocalDateTime.now());
+        account.setTotalAccount(0f);
+
+        List<AccountProduct> incomingProducts = account.getProducts();
+        account.setProducts(new ArrayList<>());
+
+        Account saved = accountService.createAccount(account);
+
+        // 2. Crear productos uno por uno
+        for (AccountProduct ap : incomingProducts) {
+            ap.setId(null);
+            ap.setAccountId(saved.getId());
+            accountProductService.addOrUpdateDirect(ap);
+        }
+
+        // 3. Recargar productos y total
+        saved.setProducts(accountProductService.getProductsByAccountId(saved.getId()));
+        saved.updateTotalAccount();
+        accountService.updateAccount(saved);
+
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
 
     // URL: http://localhost:8080/api/kitchentech/v1/account/{accountId}
     // Method: PUT

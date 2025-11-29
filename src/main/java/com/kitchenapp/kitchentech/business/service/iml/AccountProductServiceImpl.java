@@ -11,6 +11,8 @@ import com.kitchenapp.kitchentech.business.service.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class AccountProductServiceImpl implements AccountProductService {
     private final AccountProductRepository accountProductRepository;
@@ -96,5 +98,18 @@ public class AccountProductServiceImpl implements AccountProductService {
     @Transactional
     public void deleteAccountProduct(Long accountProductId) {
         accountProductRepository.deleteById(accountProductId);
+    }
+
+    @Override
+    @Transactional
+    public AccountProduct addOrUpdateDirect(AccountProduct accountProduct) {
+        return accountProductRepository.save(accountProduct);
+    }
+
+    @Override
+    public List<AccountProduct> getProductsByAccountId(Long accountId){
+        return accountProductRepository.findAll().stream()
+                .filter(p -> p.getAccountId().equals(accountId))
+                .toList();
     }
 }

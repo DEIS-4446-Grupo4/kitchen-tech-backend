@@ -53,7 +53,7 @@ public class Account {
     @Column(name = "date_log",nullable = false)
     private LocalDateTime dateLog;
 
-    @OneToMany(mappedBy = "accountId", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @Transient
     private List<AccountProduct> products = new ArrayList<>();
 
     public void updateTotalAccount() {
