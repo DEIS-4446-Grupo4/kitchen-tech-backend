@@ -26,13 +26,13 @@ public class AccountServiceImpl implements AccountService {
                 .map(a -> AccountDTO.builder()
                         .id(a.getId())
                         .accountName(a.getAccountName())
-                        .restaurantId(a.getRestaurantId())
+                        .tableId(a.getTable() != null ? a.getTable().getId() : null)
+                        .restaurantId(a.getRestaurantId() != null ? a.getRestaurantId() : null)
                         .totalAccount(a.getTotalAccount() != null ? a.getTotalAccount() : 0f)
                         .build()
                 )
                 .toList();
     }
-
 
     @Override
     public Account getAccountById(Long id) {
