@@ -41,7 +41,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(Account account) {
-        // Actualiza el total antes de guardar la cuenta por primera vez
+        // Asocia productos a la cuenta
+        if (account.getProducts() != null) {
+            account.getProducts().forEach(p -> p.setAccount(account));
+        }
+
         account.updateTotalAccount();
         return accountRepository.save(account);
     }

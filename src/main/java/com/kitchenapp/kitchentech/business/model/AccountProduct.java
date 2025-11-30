@@ -24,6 +24,8 @@ public class AccountProduct {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    // Relación con Account
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
-    private Long accountId;
+    private Account account;
 }

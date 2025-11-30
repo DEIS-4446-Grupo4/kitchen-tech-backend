@@ -59,35 +59,20 @@ public class AccountController {
 
     // URL: http://localhost:8080/api/kitchentech/v1/account
     // Method: POST
-    @Transactional
     @PostMapping
+    @Transactional
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-
-        // 1. Guardar la cuenta sin productos
-        account.setId(null);
-        account.setDateCreated(LocalDateTime.now());
-        account.setDateLog(LocalDateTime.now());
-        account.setTotalAccount(0f);
-
-        List<AccountProduct> incomingProducts = account.getProducts();
-        account.setProducts(new ArrayList<>());
-
-        Account saved = accountService.createAccount(account);
-
-        // 2. Crear productos uno por uno
-        for (AccountProduct ap : incomingProducts) {
-            ap.setId(null);
-            ap.setAccountId(saved.getId());
-            accountProductService.addOrUpdateDirect(ap);
+        // Vincula productos a la cuenta si vienen
+        if (account.getProducts() != null) {
+            account.getProducts().forEach(p -> p.setAccount(account));
         }
 
-        // 3. Recargar productos y total
-        saved.setProducts(accountProductService.getProductsByAccountId(saved.getId()));
-        saved.updateTotalAccount();
-        accountService.updateAccount(saved);
+        account.updateTotalAccount();  // Calcula el total
+        Account createdAccount = accountService.createAccount(account);
 
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        return new ResponseEntity<>(createdAccount, HttpStatus.CREATED);
     }
+
 
 
     // URL: http://localhost:8080/api/kitchentech/v1/account/{accountId}
