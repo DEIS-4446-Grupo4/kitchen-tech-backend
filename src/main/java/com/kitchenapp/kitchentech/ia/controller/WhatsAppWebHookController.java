@@ -1,5 +1,8 @@
 package com.kitchenapp.kitchentech.ia.controller;
 
+import com.kitchenapp.kitchentech.ia.IAService;
+import com.kitchenapp.kitchentech.ia.dto.ProductResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,15 +15,23 @@ import java.util.Map;
 @RequestMapping("/webhook/whatsapp")
 public class WhatsAppWebHookController {
 
+    @Autowired
+    private IAService iaService;
+
     @PostMapping
-    public ResponseEntity<String> receiveMessage(@RequestParam  Map<String, String> body){
+    public ResponseEntity<ProductResponse> receiveMessage(@RequestParam  Map<String, String> body){
         String from = body.get("From");
         String message = body.get("Body");
 
-        System.out.println("From: " + from + ": " + message);
+        if (message == null || message.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        //Aqui insertare la logica del servicio de IA
-
-        return ResponseEntity.ok("Message received");
+        try {
+            ProductResponse productResponse = iaService.classifyProduct(message);
+            return ResponseEntity.ok(productResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 }
