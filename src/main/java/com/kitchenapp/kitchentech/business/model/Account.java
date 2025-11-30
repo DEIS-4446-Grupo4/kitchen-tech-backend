@@ -35,7 +35,7 @@ public class Account {
     private Client client;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "table_id")
+    @JoinColumn(name = "table_id", nullable = true)
     private TableRestaurant table;
 
     @Column(name = "restaurant_id", nullable = false)
