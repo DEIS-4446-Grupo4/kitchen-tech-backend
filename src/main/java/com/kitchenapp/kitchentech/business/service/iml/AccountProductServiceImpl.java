@@ -49,18 +49,20 @@ public class AccountProductServiceImpl implements AccountProductService {
             return accountProductRepository.save(existingProduct);
         } else {
             // Si no existe, asigna los detalles necesarios y guarda
-            accountProduct.setAccountId(account.getId());
+            accountProduct.setAccount(account); // <-- Aquí estaba el error
 
-            accountProduct.setPrice(product.getProductPrice());  // Asigna el precio
-            accountProduct.setProductName(product.getProductName());  // Asigna el nombre
+            accountProduct.setPrice(product.getProductPrice());
+            accountProduct.setProductName(product.getProductName());
             AccountProduct newProduct = accountProductRepository.save(accountProduct);
-            accountS.getProducts().add(newProduct);
 
+            accountS.getProducts().add(newProduct);
             accountS.updateTotalAccount();
             accountService.updateAccount(accountS);
+
             return newProduct;
         }
     }
+
 
 
     @Override
@@ -76,9 +78,10 @@ public class AccountProductServiceImpl implements AccountProductService {
             return null; // O lanzar una excepción
         }
 
-        // Buscar el producto en la cuenta
-        AccountProduct existingProduct = accountProductRepository.findById(productId).orElse(null);
-        if (existingProduct == null || !existingProduct.getAccountId().equals(accountId)) {
+        // Buscar el producto en la cuenta por productId y cuenta
+        AccountProduct existingProduct = accountProductRepository.findByAccountIdAndProductId(accountId, productId)
+                .orElse(null);
+        if (existingProduct == null) {
             return null; // O lanzar una excepción
         }
 
@@ -88,9 +91,9 @@ public class AccountProductServiceImpl implements AccountProductService {
         existingProduct.setPrice(updatedAccountProduct.getPrice());
         existingProduct.setQuantity(updatedAccountProduct.getQuantity());
 
-        Account accountS = accountService.getAccountById(accountId);
-        accountS.updateTotalAccount();
-        accountService.updateAccount(accountS);
+        // Recalcular total de la cuenta
+        account.updateTotalAccount();
+        accountService.updateAccount(account);
 
         return accountProductRepository.save(existingProduct);
     }
@@ -108,8 +111,9 @@ public class AccountProductServiceImpl implements AccountProductService {
 
     @Override
     public List<AccountProduct> getProductsByAccountId(Long accountId){
+        // Filtra por la entidad Account asociada
         return accountProductRepository.findAll().stream()
-                .filter(p -> p.getAccountId().equals(accountId))
+                .filter(p -> p.getAccount() != null && p.getAccount().getId().equals(accountId))
                 .toList();
     }
 }
