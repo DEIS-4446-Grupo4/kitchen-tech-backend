@@ -1,5 +1,6 @@
 package com.kitchenapp.kitchentech.business.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.kitchenapp.kitchentech.business.Enums.State;
 import com.kitchenapp.kitchentech.iot.model.TableRestaurant;
 import com.kitchenapp.kitchentech.user.model.Restaurant;
@@ -53,7 +54,8 @@ public class Account {
     @Column(name = "date_log",nullable = false)
     private LocalDateTime dateLog;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<AccountProduct> products = new ArrayList<>();
 
     public void updateTotalAccount() {

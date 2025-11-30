@@ -1,5 +1,7 @@
 package com.kitchenapp.kitchentech.business.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -25,7 +27,8 @@ public class AccountProduct {
     private Integer quantity;
 
     // Relación con Account
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", nullable = false)
+    @JsonBackReference
     private Account account;
 }
