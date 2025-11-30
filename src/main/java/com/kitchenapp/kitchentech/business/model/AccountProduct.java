@@ -27,7 +27,7 @@ public class AccountProduct {
     private Integer quantity;
 
     // Relación con Account
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
     @JsonBackReference
     private Account account;

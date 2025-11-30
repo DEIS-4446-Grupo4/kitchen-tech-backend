@@ -41,11 +41,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(Account account) {
-        // Asocia productos a la cuenta
+        // Asegurarse de que cada AccountProduct apunte a la cuenta para que Cascade funcione
         if (account.getProducts() != null) {
-            account.getProducts().forEach(p -> p.setAccount(account));
+            account.getProducts().forEach(ap -> ap.setAccount(account));
         }
-
         account.updateTotalAccount();
         return accountRepository.save(account);
     }
@@ -61,14 +60,22 @@ public class AccountServiceImpl implements AccountService {
             accountToUpdate.setState(account.getState());
             accountToUpdate.setDateCreated(account.getDateCreated());
             accountToUpdate.setDateLog(account.getDateLog());
-            accountToUpdate.setProducts(account.getProducts());
+
+            // Reemplazar lista de productos: asignar relación bidireccional correctamente
+            accountToUpdate.getProducts().clear();
+            if (account.getProducts() != null) {
+                account.getProducts().forEach(ap -> {
+                    ap.setAccount(accountToUpdate);
+                    accountToUpdate.getProducts().add(ap);
+                });
+            }
+
             accountToUpdate.updateTotalAccount();
 
             return accountRepository.save(accountToUpdate);
         }
         return null;
     }
-
     @Override
     public void deleteAccount(Long id) {
         accountRepository.deleteById(id);

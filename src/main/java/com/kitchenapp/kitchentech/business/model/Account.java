@@ -54,7 +54,7 @@ public class Account {
     @Column(name = "date_log",nullable = false)
     private LocalDateTime dateLog;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<AccountProduct> products = new ArrayList<>();
 
@@ -62,6 +62,20 @@ public class Account {
         this.totalAccount = (float) products.stream()
                 .mapToDouble(p -> p.getPrice() * p.getQuantity())
                 .sum();
+    }
+
+    public void addProduct(AccountProduct ap) {
+        if (ap == null) return;
+        ap.setAccount(this);
+        this.products.add(ap);
+        updateTotalAccount();
+    }
+
+    public void removeProduct(AccountProduct ap) {
+        if (ap == null) return;
+        this.products.remove(ap);
+        ap.setAccount(null);
+        updateTotalAccount();
     }
 
 }
