@@ -27,7 +27,6 @@ public class AccountServiceImpl implements AccountService {
                         .id(a.getId())
                         .accountName(a.getAccountName())
                         .tableId(a.getTable() != null ? a.getTable().getId() : null)
-                        .restaurantId(a.getRestaurantId() != null ? a.getRestaurantId() : null)
                         .totalAccount(a.getTotalAccount() != null ? a.getTotalAccount() : 0f)
                         .build()
                 )
