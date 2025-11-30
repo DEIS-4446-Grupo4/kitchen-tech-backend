@@ -18,7 +18,7 @@ import java.util.Map;
 public class IAService {
 
     // Recuerda: API KEY en application.properties idealmente
-    private static final String API_KEY = "AIzaSyDoxQfVr5LTsxJodmkVtTUYgRevYQOmjcA";
+    private static final String API_KEY = "TU_API_KEY_AQUI";
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
 
     public ProductResponse classifyProduct(String nombreInput) {
