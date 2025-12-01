@@ -4,6 +4,7 @@ import com.kitchenapp.kitchentech.business.model.Product;
 import com.kitchenapp.kitchentech.ia.services.IAProductCreator;
 import com.kitchenapp.kitchentech.ia.services.IAService;
 import com.kitchenapp.kitchentech.ia.dto.ProductResponse;
+import com.kitchenapp.kitchentech.user.model.Restaurant;
 import com.kitchenapp.kitchentech.user.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +29,27 @@ public class WhatsAppWebHookController {
     @PostMapping
     public ResponseEntity<String> receiveMessage(@RequestParam  Map<String, String> body){
 
-        String phone = body.get("From");
+        // 1. Extraer número y mensaje
+        String rawPhone = body.get("From"); // Ej: "whatsapp:+51912345678"
         String message = body.get("Body");
 
         if (message == null || message.isEmpty()) {
             String twiml = "<Response><Message>Mensaje vacío. Intenta nuevamente.</Message></Response>";
             return ResponseEntity.badRequest()
+                    .header("Content-Type", "application/xml")
+                    .body(twiml);
+        }
+
+        // 2. Normalizar número para buscar en BD
+        String phone = rawPhone.replace("whatsapp:", "").trim();
+        if (phone.startsWith("+51")) {
+            phone = phone.substring(3); // Remueve el código de país
+        }
+
+        Restaurant restaurant = restaurantService.getRestaurantByPhone(phone);
+        if (restaurant == null) {
+            String twiml = "<Response><Message>No se encontró un restaurante asociado a este número.</Message></Response>";
+            return ResponseEntity.status(404)
                     .header("Content-Type", "application/xml")
                     .body(twiml);
         }
