@@ -35,3 +35,5 @@ build/
 
 ### Docker ###
 docker-compose.yml
+
+/src/main/java/com/kitchenapp/kitchentech/ia/services/TwilioService.java
