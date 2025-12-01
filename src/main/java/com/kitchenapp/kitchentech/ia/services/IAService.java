@@ -34,12 +34,13 @@ public class IAService {
         String prompt = String.format(
                 "Actúa como un administrador de restaurante. Analiza el ítem: '%s'.\n" +
                         "Genera un JSON estricto con solo 3 campos:\n" +
-                        "1. nombre: El nombre del plato con formato correcto (Mayúsculas iniciales).\n" +
-                        "2. categoria: Clasifícalo ÚNICAMENTE en una de estas opciones: ['Almuerzo', 'Postre', 'Sandwich', 'Bebida', 'Entrada'].\n" +
-                        "3. precio: Un precio estimado en Soles Peruanos (PEN) como número decimal.\n\n" +
+                        "1. productName: El nombre del plato con formato correcto (Mayúsculas iniciales).\n" +
+                        "2. category: Clasifícalo ÚNICAMENTE en una de estas opciones: ['Almuerzo', 'Postre', 'Sandwich', 'Bebida', 'Entrada'].\n" +
+                        "3. productPrice: Un precio estimado en Soles Peruanos (PEN) como número decimal.\n\n" +
                         "Responde SOLO el JSON sin markdown ni caracteres adicionales.",
                 nombreInput
         );
+
 
         Map<String, Object> requestBody = new HashMap<>();
         Map<String, Object> content = new HashMap<>();
