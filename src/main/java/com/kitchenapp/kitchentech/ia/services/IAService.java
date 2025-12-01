@@ -3,6 +3,7 @@ package com.kitchenapp.kitchentech.ia.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kitchenapp.kitchentech.ia.dto.ProductResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
@@ -18,8 +19,13 @@ import java.util.Map;
 public class IAService {
 
     // Recuerda: API KEY en application.properties idealmente
-    private static final String API_KEY = "AIzaSyDoxQfVr5LTsxJodmkVtTUYgRevYQOmjcA";
-    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY;
+    @Value("${ia.api.key}")
+    private String API_KEY;
+
+    private String getApiUrl() {
+        return "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+    }
+
 
     public ProductResponse classifyProduct(String nombreInput) {
         RestTemplate restTemplate = new RestTemplate();
@@ -51,7 +57,7 @@ public class IAService {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(API_URL, entity, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(getApiUrl(), entity, String.class);
 
             JsonNode root = objectMapper.readTree(response.getBody());
             String textResponse = root.path("candidates").get(0)
