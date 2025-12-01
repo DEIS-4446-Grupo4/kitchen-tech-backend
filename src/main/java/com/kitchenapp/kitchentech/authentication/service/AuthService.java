@@ -10,5 +10,5 @@ public interface AuthService {
     public abstract AuthResponse registerStaffUser(RegisterStaffUserRequest registerStaffUserRequest);
     public abstract AuthResponse login(LoginRequest loginRequest);
     public void existsUserByUsername(RegisterRestaurantRequest registerRequest, RegisterStaffUserRequest registerStaffUserRequest);
-    public void existsByPhoneNumber(RegisterRestaurantRequest registerRequest, RegisterStaffUserRequest registerStaffUserRequest);
+    public void existsByPhone(RegisterRestaurantRequest registerRequest);
 }

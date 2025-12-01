@@ -32,7 +32,7 @@ public class AuthController {
     public ResponseEntity<AuthResponse> registerRestaurant(@RequestBody RegisterRestaurantRequest request) {
         // Verificar si ya existe el nombre de usuario
         authService.existsUserByUsername(request, null);
-        authService.existsByPhoneNumber(request, null);
+        authService.existsByPhone(request);
 
         // Registrar el restaurante (la inicialización de casingCash debe hacerse en el servicio)
         AuthResponse registeredRestaurant = authService.registerRestaurant(request);
@@ -46,7 +46,6 @@ public class AuthController {
     public ResponseEntity<AuthResponse> registerStaffUser(@RequestBody RegisterStaffUserRequest request) {
         // Verificar si ya existe el nombre de usuario
         authService.existsUserByUsername(null, request);
-        authService.existsByPhoneNumber(null, request);
 
         // Registrar al staff
         AuthResponse registeredStaff = authService.registerStaffUser(request);

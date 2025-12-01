@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     boolean existsById(Long id);
     boolean existsByUsername(String username);
-    boolean existsByPhoneNumber(String phone);
+    boolean existsByPhone(String phone);
     List<Restaurant> findAll();
     Optional<Restaurant> findByUsername(String username);
 }
