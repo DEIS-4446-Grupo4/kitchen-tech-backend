@@ -4,7 +4,6 @@ import com.kitchenapp.kitchentech.business.model.Product;
 import com.kitchenapp.kitchentech.ia.services.IAProductCreator;
 import com.kitchenapp.kitchentech.ia.services.IAService;
 import com.kitchenapp.kitchentech.ia.dto.ProductResponse;
-import com.kitchenapp.kitchentech.ia.services.TwilioService;
 import com.kitchenapp.kitchentech.user.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
