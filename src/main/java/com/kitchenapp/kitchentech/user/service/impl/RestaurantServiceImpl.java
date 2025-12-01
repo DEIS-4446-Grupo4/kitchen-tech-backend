@@ -27,6 +27,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public Restaurant getRestaurantByPhone(String phone) {
+        return restaurantRepository.findAll().stream()
+                .filter(restaurant -> restaurant.getPhone().equals(phone))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
     public List<Restaurant> getAllRestaurants() {
         return restaurantRepository.findAll();
     }
@@ -58,6 +66,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     public void existsRestaurantById(Long id) {
         if (!restaurantRepository.existsById(id)) {
             throw new ValidationException("No existe ningun restaurante con ese id");
+        }
+    }
+
+    @Override
+    public void existsRestaurantByPhone(String phone) {
+        boolean exists = restaurantRepository.findAll().stream()
+                .anyMatch(restaurant -> restaurant.getPhone().equals(phone));
+        if (!exists) {
+            throw new ValidationException("No existe ningun restaurante con ese telefono");
         }
     }
 }

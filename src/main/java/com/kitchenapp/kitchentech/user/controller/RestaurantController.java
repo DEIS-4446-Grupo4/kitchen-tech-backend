@@ -50,6 +50,15 @@ public class RestaurantController {
         return new ResponseEntity<Restaurant>(restaurant,HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/phone/{phone}")
+    public ResponseEntity<Restaurant> getRestaurantByPhone(@PathVariable(name="phone") String phone){
+        restaurantService.existsRestaurantByPhone(phone);
+        Restaurant restaurant = restaurantService.getRestaurantByPhone(phone);
+
+        return new ResponseEntity<Restaurant>(restaurant,HttpStatus.OK);
+    }
+
     // URL: http://localhost:8080/api/kitchentech/v1/restaurant/{restaurantId}
     // Method: PUT
     @Transactional

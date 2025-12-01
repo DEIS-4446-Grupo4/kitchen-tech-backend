@@ -135,4 +135,15 @@ public class AuthServiceImpl implements AuthService {
             throw new ValidationException("Ya existe un usuario con el username " + username);
         }
     }
+
+    @Override
+    public void existsByPhoneNumber(RegisterRestaurantRequest registerRestaurantRequest, RegisterStaffUserRequest registerStaffUserRequest) {
+        boolean existsInStaff = registerStaffUserRequest != null && staffUserRepository.existsByPhoneNumber(registerStaffUserRequest.getPhone());
+        boolean existsInRestaurant = registerRestaurantRequest != null && restaurantRepository.existsByPhoneNumber(registerRestaurantRequest.getPhone());
+
+        if (existsInStaff || existsInRestaurant) {
+            String phone = registerStaffUserRequest != null ? registerStaffUserRequest.getPhone() : registerRestaurantRequest.getPhone();
+            throw new ValidationException("Ya existe un usuario con el número de teléfono " + phone);
+        }
+    }
 }
