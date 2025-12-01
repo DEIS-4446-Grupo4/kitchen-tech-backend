@@ -39,7 +39,7 @@ public class WhatsAppWebHookController {
             ProductResponse productResponse = iaService.classifyProduct(message);
 
             // Obtener restauranteId asociado al número de teléfono
-            Long restaurantId = restaurantService.getRestaurantIdByWhatsapp(phone);
+            Long restaurantId = restaurantService.getRestaurantByPhone(phone).getId();
 
             // Crear el producto en la base de datos
             Product created = iaProductCreator.createProductFromIA(productResponse, restaurantId);
