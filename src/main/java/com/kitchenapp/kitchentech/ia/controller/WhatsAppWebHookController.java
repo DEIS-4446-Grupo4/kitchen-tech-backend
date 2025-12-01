@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/webhook/whatsapp")
+@RequestMapping("api/kitchentech/v1/webhook/whatsapp")
 public class WhatsAppWebHookController {
 
     @Autowired

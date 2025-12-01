@@ -26,11 +26,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest ->
                         authRequest
-                                .requestMatchers("/api/kitchentech/v1/auth/**","api/kitchentech/v1/table/**").permitAll()
+                                .requestMatchers("/api/kitchentech/v1/auth/**","api/kitchentech/v1/table/**", "api/kitchentech/v1/webhook/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/kitchentech/v1/user","/api/kitchentech/v1/restaurant",
                                         "api/kitchentech/v1/supply","api/kitchentech/v1/product","api/kitchentech/v1/client",
-                                        "api/kitchentech/v1/account").authenticated()
+                                        "api/kitchentech/v1/account", "api/kitchentech/v1/webhook/**").authenticated()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManager ->
